@@ -6,6 +6,14 @@
 - Accurately checking for mask usage in public places, such as airports, can help enforce mask requirements.
 - IoU, or Intersection over Union, is a metric used in object detection to evaluate the accuracy of the model's predictions by measuring the overlap between the predicted and ground truth bounding boxes of objects in an image. Higher IoU values indicate better alignment between predicted and actual object locations.
 
+## Credit and References
+- Starter code credit: https://medium.com/@doleron/building-your-own-object-detector-from-scratch-bfeadfaddad8
+- Data source: https://www.kaggle.com/datasets/techzizou/labeled-mask-dataset-yolo-darknet
+- Performance tips: https://www.tensorflow.org/datasets/performances
+- Better performance with the tf.data API tips: https://www.tensorflow.org/guide/data_performance
+- IoU for object detection: https://pyimagesearch.com/2016/11/07/intersection-over-union-iou-for-object-detection/
+- Deployment in ECS Fargate: https://aws.plainenglish.io/deploying-a-docker-container-in-aws-using-fargate-5a19a140b018.
+
 ## Data
 - The dataset containes 1,292 images of people, and corresponding label files.
 - Some are with masks, and some are without.
@@ -27,9 +35,12 @@
 6. pipenv install --dev (if running notebook or deploying to AWS Elastic Beanstalk)
 7. pipenv shell
 
-## Run EDA, Data Splitting, and Preliminary Model Training Notebook
+## Run Data Splitting and Preliminary Model Training Notebook
 1. sudo apt install graphviz
 - If you can't install graphviz, you can skip the cell that visualizes the neural network.
+- Run all cells.
+
+## Run EDA notebook
 - Run all cells.
 
 ## Run Model Training
@@ -66,7 +77,7 @@
 2. docker tag mask:latest 614132154255.dkr.ecr.us-east-1.amazonaws.com/mask:latest
 3. aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 614132154255.dkr.ecr.us-east-1.amazonaws.com
 4. docker push 614132154255.dkr.ecr.us-east-1.amazonaws.com/mask:latest
-- Follow steps 4-6 here to create and Amazon ECS cluster, define a task definition, and create an ECS service to deploy the Docker container: https://aws.plainenglish.io/deploying-a-docker-container-in-aws-using-fargate-5a19a140b018.
+- Create an Amazon ECS cluster, define a task definition, and create an ECS service to deploy the Docker container. If you need help with this, follow steps 4-6 from the last link in the "Credit and References" section above.
 - Don't forget to create an inbound rule for your security group that allows all traffic on port 9696.
 - If you want to try my API on ECS Fargate, you can run inference_app_test_aws_eb.py.
 - You can modify the input image URL in inference_app_test_aws_eb.py.
