@@ -46,6 +46,8 @@
 ## Run Predictions in Terminal
 1. python3 inference.py --data '{"url": "https://image.cnbcfm.com/api/v1/image/106467352-1585602933667virus-medical-flu-mask-health-protection-woman-young-outdoor-sick-pollution-protective-danger-face_t20_o07dbe.jpg"}'
 - You can modify the input image URL in the command above.
+- If you would like to visualize the box coordinates that are returned, try running check_inference_box.ipynb, but don't forget to modify the box coordinates and image URL accordingly.
+- Please note, the code returns the coordinates of the box in the resized image. If you prefer to return the coordinates in the original image, please modify the code accordingly.
 
 ## Run App in Terminal
 1. python3 inference_app.py
@@ -58,10 +60,13 @@
 3. python3 inference_app_test.py
 - You can modify the input image URL in inference_app_test.py.
 
-## Deploy to AWS Elastic Beanstalk
-1. eb init -p docker -r us-east-1 mask
-2. eb create mask
-3. python3 inference_app_test_aws_eb.py
-...
-4. eb terminate mask
+## Deploy to ECS Fargate
+1. docker build -t mask .
+- Create a repository named mask in Amazon ECR. Modify the following commands based on the repository's account ID and region.
+2. docker tag mask:latest 614132154255.dkr.ecr.us-east-1.amazonaws.com/mask:latest
+3. aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 614132154255.dkr.ecr.us-east-1.amazonaws.com
+4. docker push 614132154255.dkr.ecr.us-east-1.amazonaws.com/mask:latest
+- Follow steps 4-6 here to create and Amazon ECS cluster, define a task definition, and create an ECS service to deploy the Docker container: https://aws.plainenglish.io/deploying-a-docker-container-in-aws-using-fargate-5a19a140b018.
+- Don't forget to create an inbound rule for your security group that allows all traffic on port 9696.
+- If you want to try my API on ECS Fargate, you can run inference_app_test_aws_eb.py.
 - You can modify the input image URL in inference_app_test_aws_eb.py.
